@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "project_id": "gcp-dev-ops",
+    "name": "packer-jumphost"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1604-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-west1-a",
+      "disk_size": "20",
+      "image_name": "{{user `name`}}-{{timestamp}}",
+      "image_family": "tf-builder",
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y default-jdk git zip",
+        "wget https://releases.hashicorp.com/terraform/0.13.4/terraform_0.13.4_linux_amd64.zip",
+        "unzip terraform*.zip",
+        "sudo mv terraform /usr/local/bin",
+        "terraform version"
+      ]
+    }
+  ]
+}
