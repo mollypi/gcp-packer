@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/gcp-dev-ops/packer'
+  args:
+  - build
+  - ../base-windows.json
