@@ -1,37 +1,43 @@
 {
   "variables": {
-    "gce_base": "",
-    "name": "mdepew-packwin",
+    "gce_base": "windows-server-2016-dc-v20211012",
+    "name": "madebypacker",
     "project_id": "gcp-dev-ops",
     "startup_script": "winrm quickconfig -quiet & net user /add superuser & net localgroup administrators superuser /add & netsh advfirewall firewall set rule name=\"Windows Remote Management (HTTP-In)\" profile=public new remoteip=any & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Set-ExecutionPolicy -ExecutionPolicy bypass -Force\""
-},
-  "builders": [{
-    "type": "googlecompute",
-    "project_id": "{{user `gce_base`}}",
-    "source_image": "{{user `gce_base`}}",
-    "machine_type": "n1-standard-2",
-    "zone": "us-central1-a",
-    "instance_name": "{{user `name`}}-{{timestamp}}",
-    "image_name": "{{user `name`}}-{{timestamp}}",
-    "communicator": "winrm",
-    "winrm_username": "superuser",
-    "winrm_insecure": true,
-    "winrm_timeout": "300m",
-    "winrm_use_ssl": true,
-    "state_timeout": "60m",
-    "disk_size": 50,
-    "metadata": {
-      "windows-startup-script-cmd": "{{user `startup_script`}}"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `gce_base`}}",
+      "source_image": "{{user `gce_base`}}",
+      "machine_type": "n1-standard-2",
+      "zone": "us-central1-a",
+      "instance_name": "{{user `name`}}-{{timestamp}}",
+      "image_name": "{{user `name`}}-{{timestamp}}",
+      "communicator": "winrm",
+      "winrm_username": "superuser",
+      "winrm_insecure": true,
+      "winrm_timeout": "300m",
+      "winrm_use_ssl": true,
+      "state_timeout": "60m",
+      "disk_size": 50,
+      "metadata": {
+        "windows-startup-script-cmd": "{{user `startup_script`}}"
       }
-    }],
+    }
+  ],
   "provisioners": [
     {
       "type": "powershell",
-      "script": "../psscripts/ConfigureRemotingForAnsible.ps1"
+      "script": "../psscripts/Create-TemporaryUser.ps1"
     },
     {
       "type": "powershell",
-      "script": "../psscripts/InstallGit.ps1"
+      "script": "../psscripts/Install-Choco.ps1"
+    },
+    {
+      "type": "powershell",
+      "script": "../psscripts/ConfigureRemotingForAnsible.ps1"
     }
   ]
 }
