@@ -8,7 +8,7 @@
   "builders": [
     {
       "type": "googlecompute",
-      "project_id": "{{user `gce_base`}}",
+      "project_id": "gcp-dev-ops",
       "source_image": "windows-server-2016-dc-v20211012",
       "machine_type": "n1-standard-2",
       "zone": "us-central1-a",
@@ -29,15 +29,15 @@
   "provisioners": [
     {
       "type": "powershell",
-      "script": "../psscripts/Create-TemporaryUser.ps1"
+      "script": "Create-TemporaryUser.ps1"
     },
     {
       "type": "powershell",
-      "script": "../psscripts/Install-Choco.ps1"
+      "script": "Install-Choco.ps1"
     },
     {
       "type": "powershell",
-      "script": "../psscripts/ConfigureRemotingForAnsible.ps1"
+      "script": "ConfigureRemotingForAnsible.ps1"
     }
   ]
 }
