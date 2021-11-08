@@ -18,7 +18,8 @@
       "winrm_username": "superuser",
       "winrm_insecure": true,
       "winrm_timeout": "300m",
-      "winrm_use_ssl": true,
+      "winrm_use_ssl": false,
+      "use_internal_ip": "true",
       "state_timeout": "60m",
       "disk_size": 50,
       "metadata": {
