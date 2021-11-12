@@ -1,6 +1,6 @@
 {
   "variables": {
-    "startup_script": "winrm quickconfig -quiet & net user /add packer & net localgroup administrators packer /add & netsh advfirewall firewall set rule name=\"Windows Remote Management (HTTP-In)\" profile=public new remoteip=any & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Set-ExecutionPolicy -ExecutionPolicy bypass -Force\""
+    "startup_script": "winrm quickconfig -quiet & net user /add packer & net localgroup administrators packer /add & netsh advfirewall firewall set rule name=\"Windows Remote Management (HTTP-In)\" profile=public new remoteip=any & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Set-ExecutionPolicy -ExecutionPolicy bypass -Force\" & powershell.exe (New-Object Net.WebClient).DownloadFile(\"https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.ps1\", \"${env:UserProfile}\\add-google-cloud-ops-agent-repo.ps1\") Invoke-Expression \"${env:UserProfile}\\add-google-cloud-ops-agent-repo.ps1 -AlsoInstall\""
   },
   "builders": [
     {
@@ -17,6 +17,7 @@
       "winrm_insecure": true,
       "winrm_timeout": "300m",
       "winrm_use_ssl": true,
+      "tags": ["packer-winrm"],
       "metadata": { "windows-startup-script-cmd": "{{user `startup_script`}}" }
     }
   ],
