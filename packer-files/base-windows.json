@@ -9,6 +9,7 @@
     {
       "type": "googlecompute",
       "project_id": "gcp-dev-ops",
+      "account_file": "sa.yml",
       "source_image": "windows-server-2016-dc-v20211012",
       "machine_type": "n1-standard-2",
       "zone": "us-central1-a",
@@ -19,6 +20,7 @@
       "winrm_insecure": true,
       "winrm_timeout": "300m",
       "winrm_use_ssl": true,
+      "tags": ["packer-winrm"],
       "state_timeout": "60m",
       "disk_size": 50,
       "metadata": {
