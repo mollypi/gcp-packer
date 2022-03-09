@@ -3,16 +3,17 @@
     "gce_base": "windows-server-2016-dc-v20211012",
     "name": "madebypacker",
     "project_id": "gcp-dev-ops",
-    "startup_script": "winrm quickconfig -quiet & net user /add superuser & net localgroup administrators superuser /add & netsh advfirewall firewall set rule name=\"Windows Remote Management (HTTP-In)\" profile=public new remoteip=any & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Set-ExecutionPolicy -ExecutionPolicy bypass -Force\""
+    "startup_script": "winrm quickconfig -quiet & net user /add superuser & net localgroup administrators superuser /add & netsh advfirewall firewall set rule name=\"Windows Remote Management (HTTP-In)\" profile=public new remoteip=any & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Set-ExecutionPolicy -ExecutionPolicy bypass -Force\"",
+    "zone": "us-central1"
   },
   "builders": [
     {
       "type": "googlecompute",
-      "project_id": "gcp-dev-ops",
+      "project_id": "{{user `project_id`}}",
       "account_file": "sa.yml",
-      "source_image": "windows-server-2016-dc-v20211012",
+      "source_image": "{{user `gce_base`}}",
       "machine_type": "n1-standard-2",
-      "zone": "us-central1-a",
+      "zone": "{{user `zone`}}",
       "instance_name": "{{user `name`}}-{{timestamp}}",
       "image_name": "{{user `name`}}-{{timestamp}}",
       "communicator": "winrm",
@@ -31,15 +32,15 @@
   "provisioners": [
     {
       "type": "powershell",
-      "script": "Create-TemporaryUser.ps1"
+      "script": "provison-scripts/Create-TemporaryUser.ps1"
     },
     {
       "type": "powershell",
-      "script": "Install-Choco.ps1"
+      "script": "provison-scripts/Install-Choco.ps1"
     },
     {
       "type": "powershell",
-      "script": "ConfigureRemotingForAnsible.ps1"
+      "script": "provison-scripts/ConfigureRemotingForAnsible.ps1"
     }
   ]
 }
